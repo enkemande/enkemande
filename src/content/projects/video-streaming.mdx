@@ -1,0 +1,105 @@
+---
+title: Video Streaming Platform
+description: Scalable video streaming platform with adaptive bitrate streaming and content management.
+longDescription: A Netflix-like video streaming platform supporting HLS and DASH adaptive streaming, built with Node.js backend and React frontend. Includes content management, user profiles, and recommendation engine.
+date: 2025-10-10
+image: 🎬
+role: Full-stack Engineer
+impact: Streams 500M+ videos monthly
+featured: false
+tags: [Node.js, React, HLS/DASH, AWS, PostgreSQL]
+github: https://github.com
+live: https://example.com
+---
+
+## Project Overview
+
+The Video Streaming Platform provides a scalable infrastructure for delivering video content to millions of concurrent users. The platform employs industry-standard streaming technologies and optimization techniques.
+
+## Key Features
+
+### Adaptive Bitrate Streaming
+- HLS (HTTP Live Streaming) for iOS and Safari
+- DASH (Dynamic Adaptive Streaming over HTTP) for other platforms
+- Automatic quality selection based on bandwidth
+- Smooth transitions between quality levels
+
+### Content Management
+- Video upload and processing pipeline
+- Automatic transcoding to multiple formats
+- Metadata management
+- Content organization and categorization
+
+### Recommendation Engine
+- Collaborative filtering for personalized recommendations
+- Content-based recommendations
+- Trending content algorithms
+- User preference learning
+
+### User Experience
+- Seamless playback across devices
+- Watch history and resume functionality
+- Custom playlists
+- Social sharing features
+
+## Technical Architecture
+
+### Streaming Infrastructure
+- CloudFront CDN for global content delivery
+- Elemental MediaConvert for video transcoding
+- S3 for storage with intelligent tiering
+- CloudWatch for monitoring
+
+### Backend Services
+- Node.js microservices architecture
+- PostgreSQL for metadata
+- Redis for caching and session management
+- Kafka for event streaming
+
+### Frontend
+- React with TypeScript
+- Video.js for player implementation
+- Server-side rendering for performance
+- Progressive enhancement for offline support
+
+## Performance Metrics
+
+- **Startup Time**: < 2 seconds
+- **Quality Switch Time**: < 500ms
+- **Concurrent Users**: 100k+
+- **Monthly Streams**: 500M+
+- **Availability**: 99.99%
+
+## Streaming Protocol Deep Dive
+
+### HLS Implementation
+HLS segments video into small chunks (typically 10 seconds) and uses playlists to manage playback.
+
+```plaintext
+#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-TARGETDURATION:10
+#EXTINF:10.0,
+segment-1.ts
+#EXTINF:10.0,
+segment-2.ts
+#EXT-X-ENDLIST
+```
+
+### DASH Implementation
+DASH uses Media Presentation Description (MPD) XML format for manifest and supports more adaptive strategies.
+
+## Scaling Challenges & Solutions
+
+### Concurrent User Load
+Implemented horizontal scaling with load balancers and auto-scaling groups to handle traffic spikes.
+
+### Content Delivery Latency
+Multi-region CDN with edge locations ensures users receive content from nearby servers.
+
+### Storage Optimization
+Intelligent tiering moves infrequently accessed content to cheaper storage while keeping popular content readily available.
+
+## Results & Impact
+
+The platform successfully streams over 500M videos monthly, supporting millions of concurrent users globally with minimal latency and high availability.

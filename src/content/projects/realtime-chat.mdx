@@ -1,0 +1,67 @@
+---
+title: Real-time Chat App
+description: WebSocket-based chat application with end-to-end encryption, user authentication, and message history.
+longDescription: A modern chat application with real-time messaging using Socket.io, end-to-end encryption, user authentication with JWT, and persistent message storage with MongoDB.
+date: 2025-10-13
+image: 💬
+role: Full-stack Engineer
+impact: 10k+ active users
+featured: false
+tags: [Node.js, Socket.io, React, MongoDB, JWT]
+github: https://github.com
+live: https://example.com
+---
+
+## Overview
+
+The Real-time Chat App demonstrates modern web technologies for building interactive communication platforms. The application prioritizes security, performance, and user experience.
+
+## Core Features
+
+### Real-time Messaging
+Instant message delivery using WebSocket connections with Socket.io ensures users receive messages with minimal latency.
+
+### End-to-End Encryption
+Messages are encrypted on the client side using TweetNaCl.js before transmission, ensuring privacy even from server administrators.
+
+### User Authentication
+Secure JWT-based authentication with refresh tokens provides a robust security model.
+
+### Message History
+Persistent storage of messages in MongoDB allows users to retrieve conversation history across sessions and devices.
+
+### User Presence
+Real-time presence indicators show which users are online and when they're typing.
+
+## Technical Implementation
+
+### Frontend
+- React with TypeScript for type safety
+- Socket.io client for real-time communication
+- End-to-end encryption with TweetNaCl.js
+- React Query for state management
+
+### Backend
+- Node.js with Express server
+- Socket.io for WebSocket management
+- MongoDB for persistent storage
+- JWT for authentication
+
+### Security
+- HTTPS/WSS for encrypted transport
+- JWT token rotation
+- Input validation and sanitization
+- Rate limiting on API endpoints
+
+## Performance Optimizations
+
+- Connection pooling for database
+- Message pagination for efficient history loading
+- Lazy loading of user avatars
+- Client-side message caching
+
+## Lessons Learned
+
+- WebSocket connection management at scale requires careful attention to memory leaks
+- End-to-end encryption adds significant complexity but is essential for privacy
+- Real-time features benefit greatly from comprehensive error handling and fallback mechanisms
