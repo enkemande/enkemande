@@ -5,6 +5,16 @@ const withMDX = createMDX({
   extension: /\.mdx?$/,
   options: {
     jsx: true,
+    rehypePlugins: [
+      [
+        "rehype-pretty-code",
+        {
+          theme: "dracula",
+          keepBackground: true,
+          defaultLang: "plaintext",
+        },
+      ],
+    ],
   },
 });
 

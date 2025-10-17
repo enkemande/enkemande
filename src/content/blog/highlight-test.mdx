@@ -1,0 +1,85 @@
+---
+title: Syntax Highlight Test
+date: 2025-10-17
+readTime: 3 min read
+author: Dev
+category: Test
+---
+
+## Syntax Highlighting with Prism & Line Numbers
+
+This page demonstrates syntax highlighting using the **Dracula theme** with **line numbers enabled**.
+
+### JavaScript Example
+
+```javascript
+function fibonacci(n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+const result = fibonacci(10);
+console.log(`The 10th Fibonacci number is: ${result}`);
+```
+
+### TypeScript Example
+
+```typescript
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+async function fetchUser(id: number): Promise<User> {
+  const response = await fetch(`/api/users/${id}`);
+  return response.json();
+}
+
+const user = await fetchUser(1);
+console.log(user.name);
+```
+
+### React Component Example
+
+```jsx
+import React, { useState } from 'react';
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+    </div>
+  );
+}
+```
+
+### CSS Example
+
+```css
+.code-block {
+  background: #282a36;
+  color: #f8f8f2;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(248, 248, 242, 0.1);
+  overflow: auto;
+}
+
+.code-block .token {
+  font-weight: inherit;
+}
+```
+
+### Inline Code
+
+Inline code like `const x = 42;` or `function greet() {}` is still styled as inline code without line numbers.
+
+---
+
+All code blocks above are highlighted with Prism's **Dracula theme** and show **line numbers** on the left.

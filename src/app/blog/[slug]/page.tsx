@@ -8,6 +8,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { YouTubeEmbed } from '@/components/youtube-embed';
+import rehypePrettyCode from 'rehype-pretty-code';
 
 export async function generateStaticParams() {
   const slugs = await getAllBlogSlugs();
@@ -98,20 +99,23 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
               />
             </div>
           )}
-          <MDXRemote source={post.content} components={mdxComponents} />
-        </div>
-
-        {/* Author Info */}
-        <div className="py-8 border-t border-b border-border/50">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center text-2xl">
-              👨‍💻
-            </div>
-            <div>
-              <h3 className="font-bold text-lg">{post.author}</h3>
-              <p className="text-foreground/60">Creative Senior Software Engineer specializing in full-stack development and scalable systems.</p>
-            </div>
-          </div>
+          <MDXRemote 
+            source={post.content} 
+            components={mdxComponents}
+            options={{
+              mdxOptions: {
+                rehypePlugins: [
+                  [
+                    rehypePrettyCode,
+                    {
+                      theme: 'dracula',
+                      keepBackground: true,
+                    },
+                  ],
+                ],
+              },
+            }}
+          />
         </div>
 
         {/* Share */}

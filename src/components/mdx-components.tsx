@@ -29,23 +29,15 @@ export const mdxComponents = {
     </blockquote>
   ),
   code: ({ children, className }: { children: React.ReactNode; className?: string }) => {
-    if (className?.includes('language-')) {
-      // Block code
-      return (
-        <code className={`${className} text-sm bg-slate-950/40 text-accent`}>
-          {children}
-        </code>
-      );
-    }
-    // Inline code
+    // Inline code (not in a pre tag)
     return (
-      <code className="bg-slate-950/40 px-2 py-1 rounded text-accent text-sm">
+      <code className="bg-slate-950/40 px-2 py-1 rounded text-accent text-sm font-mono">
         {children}
       </code>
     );
   },
   pre: ({ children }: { children: React.ReactNode }) => (
-    <pre className="bg-slate-950/40 border border-accent/20 p-4 rounded-lg overflow-x-auto mb-4">
+    <pre className="bg-slate-950 border border-slate-800 p-4 rounded-lg overflow-x-auto mb-4 text-sm leading-relaxed font-mono">
       {children}
     </pre>
   ),

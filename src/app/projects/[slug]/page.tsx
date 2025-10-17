@@ -8,6 +8,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { YouTubeEmbed } from '@/components/youtube-embed';
+import rehypePrettyCode from 'rehype-pretty-code';
 
 export async function generateStaticParams() {
   const slugs = await getAllProjectSlugs();
@@ -111,7 +112,23 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                     />
                 </div>
             )}
-          <MDXRemote source={project.content} components={mdxComponents} />
+          <MDXRemote 
+            source={project.content} 
+            components={mdxComponents}
+            options={{
+              mdxOptions: {
+                rehypePlugins: [
+                  [
+                    rehypePrettyCode,
+                    {
+                      theme: 'dracula',
+                      keepBackground: true,
+                    },
+                  ],
+                ],
+              },
+            }}
+          />
         </div>
 
         {/* Project Impact */}
