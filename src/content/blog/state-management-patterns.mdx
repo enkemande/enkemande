@@ -1,0 +1,167 @@
+---
+title: State Management Patterns in Modern Applications
+description: Explore state management approaches including Redux, Zustand, Context API, and when to use each pattern.
+date: 2025-10-07
+readTime: 13 min read
+author: Edison Nkemande
+category: React
+---
+
+## Introduction
+
+State management is crucial for building scalable applications. This guide explores different patterns and their trade-offs.
+
+## State Management Options
+
+### Context API + useReducer
+
+Lightweight, built-in solution for React:
+
+```typescript
+import { createContext, useReducer } from 'react';
+
+type State = { count: number };
+type Action = { type: 'INCREMENT' | 'DECREMENT' };
+
+const AppContext = createContext<[State, React.Dispatch<Action>] | null>(null);
+
+export function AppProvider({ children }) {
+  const [state, dispatch] = useReducer(
+    (state: State, action: Action): State => {
+      switch (action.type) {
+        case 'INCREMENT':
+          return { count: state.count + 1 };
+        case 'DECREMENT':
+          return { count: state.count - 1 };
+        default:
+          return state;
+      }
+    },
+    { count: 0 }
+  );
+
+  return (
+    <AppContext.Provider value={[state, dispatch]}>
+      {children}
+    </AppContext.Provider>
+  );
+}
+```
+
+### Zustand
+
+Lightweight and performant store:
+
+```typescript
+import { create } from 'zustand';
+
+interface Store {
+  count: number;
+  increment: () => void;
+  decrement: () => void;
+}
+
+export const useStore = create<Store>((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  decrement: () => set((state) => ({ count: state.count - 1 })),
+}));
+
+// Usage
+function Counter() {
+  const { count, increment } = useStore();
+  return <button onClick={increment}>{count}</button>;
+}
+```
+
+### Redux
+
+For complex applications with predictable state flow:
+
+```typescript
+import { createSlice, configureStore } from '@reduxjs/toolkit';
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: { value: 0 },
+  reducers: {
+    increment: (state) => { state.value++; },
+    decrement: (state) => { state.value--; },
+  },
+});
+
+const store = configureStore({
+  reducer: { counter: counterSlice.reducer },
+});
+
+// Usage
+import { useSelector, useDispatch } from 'react-redux';
+
+function Counter() {
+  const count = useSelector((state) => state.counter.value);
+  const dispatch = useDispatch();
+  
+  return <button onClick={() => dispatch(counterSlice.actions.increment())}>{count}</button>;
+}
+```
+
+## Comparison
+
+| Approach | Complexity | Performance | Bundle Size | Use Case |
+|----------|-----------|-------------|------------|----------|
+| useState | Low | Good | 0 | Simple state |
+| Context + useReducer | Medium | Fair | 0 | Medium apps |
+| Zustand | Low | Excellent | Small | Modern apps |
+| Redux | High | Excellent | Medium | Complex apps |
+
+## State Management Best Practices
+
+### 1. Normalize State Structure
+```typescript
+// ✓ Good: Normalized
+const state = {
+  users: {
+    byId: { '1': { id: '1', name: 'John' } },
+    allIds: ['1']
+  }
+};
+
+// ✗ Bad: Nested
+const state = {
+  users: [{ id: '1', name: 'John', posts: [...] }]
+};
+```
+
+### 2. Separate Concerns
+```typescript
+const useUserStore = create(...); // User data
+const useUIStore = create(...);   // UI state
+const useAuthStore = create(...); // Authentication
+```
+
+### 3. Memoization for Performance
+```typescript
+const selectUserById = (id: string) =>
+  (state) => state.users.byId[id];
+
+// Components only re-render if selected value changes
+const user = useStore(selectUserById(userId));
+```
+
+## Server State vs Client State
+
+```typescript
+// Client State (local)
+const [isModalOpen, setIsModalOpen] = useState(false);
+
+// Server State (remote)
+const { data: users } = useQuery(['users'], fetchUsers);
+```
+
+Use separate libraries for each:
+- **Client**: Zustand, Redux
+- **Server**: React Query, SWR
+
+## Conclusion
+
+Choose state management based on application complexity. Start simple and evolve as your needs grow. Modern approaches like Zustand offer great developer experience with minimal overhead.

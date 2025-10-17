@@ -1,64 +1,78 @@
 import Link from 'next/link';
-import { ArrowRight, Download, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
+import { Download, Mail, MapPin, ExternalLink, ArrowRight, Globe } from 'lucide-react';
 import { SKILLS } from '@/lib/skills';
 import { EXPERIENCE, EDUCATION, CERTIFICATIONS } from '@/lib/resume';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 
+const RESUME_FILE = 'EDISON-NKEMANDE-RESUME.pdf';
+const RESUME_FILENAME = 'Edison_Nkemande_Resume.pdf';
+
 export default function ResumePage() {
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-slate-900/5 dark:to-slate-900/50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black">
       {/* Navigation */}
-    <Header />
+      <Header />
 
-      {/* Header Section */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+      {/* Hero Section */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20 lg:py-32 relative">
+        {/* Animated grid background */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-pink-500/10 pointer-events-none" />
+          <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full filter blur-3xl" />
+          <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-pink-500/5 rounded-full filter blur-3xl" />
+        </div>
+
+        <div className="flex items-center gap-2 mb-6">
+          <Globe size={24} className="text-purple-400" />
+          <span className="font-mono text-sm text-purple-400 tracking-wider">$ cat resume.md</span>
+        </div>
+
         <div className="flex flex-col gap-8">
           <div>
-            <h1 className="font-sans text-5xl sm:text-6xl font-bold tracking-[-.02em] leading-tight mb-2">
-              Edison Nkemande
+            <h1 className="font-mono text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tighter leading-tight mb-4 sm:mb-6">
+              <span className="text-white">Edison</span>
+              <br />
+              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Nkemande
+              </span>
             </h1>
-            <p className="text-2xl text-accent font-semibold mb-6">
+            <p className="font-sans text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl mb-4">
               Senior Software Engineer | Cloud Solutions Architect
             </p>
-            <p className="text-lg text-foreground/70 leading-relaxed max-w-2xl">
-              Innovative and results-driven Senior Software Engineer with 8+ years of experience building scalable web and mobile applications across fintech, payments, and service platforms. Adept at architecting full-stack solutions using Flutter, React/Expo, Firebase, and Node.js, with a strong focus on clean architecture, domain-driven design, and developer mentorship. Passionate about building impactful products that combine strong engineering, modern UI/UX, and business value.
+            <p className="text-base sm:text-base text-slate-400 leading-relaxed max-w-3xl">
+              Innovative and results-driven Senior Software Engineer with 8+ years of experience building scalable web and mobile applications across fintech, payments, and service platforms.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-6 pt-4">
-            <div className="flex items-center gap-2 text-foreground/70">
-              <Mail size={20} className="text-accent" />
-              <a href="mailto:nkemande@gmail.com" className="hover:text-accent transition-colors">
+            <div className="flex items-center gap-2 text-slate-300">
+              <Mail size={20} className="text-purple-400" />
+              <a href="mailto:nkemande@gmail.com" className="hover:text-purple-400 transition-colors">
                 hello@nkemande.dev
               </a>
             </div>
-            {/* <div className="flex items-center gap-2 text-foreground/70">
-              <Phone size={20} className="text-accent" />
-              <a href="tel:+17137051803" className="hover:text-accent transition-colors">
-                +1 (713) 705-1803
-              </a>
-            </div> */}
-            <div className="flex items-center gap-2 text-foreground/70">
-              <MapPin size={20} className="text-accent" />
+            <div className="flex items-center gap-2 text-slate-300">
+              <MapPin size={20} className="text-purple-400" />
               <span>Missouri City, Texas</span>
             </div>
           </div>
 
-          <div className="flex gap-4 pt-4">
+          <div className="flex gap-4 pt-6">
             <a
-              href="/resume-edison-nkemande.pdf"
-              download
-              className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-background rounded-full font-medium hover:bg-accent-light transition-all hover:gap-3"
+              href={`/${RESUME_FILE}`}
+              download={RESUME_FILENAME}
+              className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-slate-950 font-semibold rounded-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all"
             >
-              <Download size={20} /> Download PDF
+              <Download size={20} /> 
+              Download PDF
             </a>
             <a
               href="https://github.com/enkemande"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 border border-border rounded-full font-medium hover:border-accent hover:text-accent transition-all"
+              className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 border border-slate-700 text-slate-400 hover:text-purple-400 hover:border-purple-500/50 hover:bg-purple-500/10 transition-all rounded-lg"
             >
               GitHub <ExternalLink size={18} />
             </a>
@@ -67,18 +81,22 @@ export default function ResumePage() {
       </section>
 
       {/* Professional Experience */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 border-t border-border/50">
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-[-.02em] mb-12">Professional Experience</h2>
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20 border-t border-slate-800">
+        <div className="mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tighter text-white">
+            Professional <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Experience</span>
+          </h2>
+        </div>
 
         <div className="space-y-12">
           {EXPERIENCE.map((job, index) => (
-            <div key={index} className="relative pl-8 border-l-2 border-accent/30 hover:border-accent/60 transition-colors">
-              <div className="absolute -left-3 top-0 w-6 h-6 bg-accent rounded-full" />
+            <div key={index} className="relative pl-8 border-l-2 border-purple-500/30 hover:border-purple-500/60 transition-colors">
+              <div className="absolute -left-3 top-0 w-6 h-6 bg-purple-500 rounded-full" />
 
               <div className="mb-4">
-                <h3 className="text-2xl font-bold mb-1">{job.title}</h3>
-                <p className="text-lg text-accent font-semibold mb-2">{job.company}</p>
-                <div className="flex flex-wrap gap-4 text-sm text-foreground/60">
+                <h3 className="text-2xl font-bold mb-1 text-white">{job.title}</h3>
+                <p className="text-lg text-purple-400 font-semibold mb-2">{job.company}</p>
+                <div className="flex flex-wrap gap-4 text-sm text-slate-500 font-mono">
                   <span>{job.period}</span>
                   <span>•</span>
                   <span className="flex items-center gap-1">
@@ -90,8 +108,8 @@ export default function ResumePage() {
 
               <ul className="space-y-2">
                 {job.highlights.map((highlight, i) => (
-                  <li key={i} className="text-foreground/70 leading-relaxed flex gap-3">
-                    <span className="text-accent mt-1">▸</span>
+                  <li key={i} className="text-slate-400 leading-relaxed flex gap-3">
+                    <span className="text-purple-400 mt-1">▸</span>
                     <span>{highlight}</span>
                   </li>
                 ))}
@@ -102,18 +120,25 @@ export default function ResumePage() {
       </section>
 
       {/* Skills */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 border-t border-border/50">
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-[-.02em] mb-12">Technical Skills</h2>
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20 border-t border-slate-800">
+        <div className="mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tighter text-white">
+            Technical <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Skills</span>
+          </h2>
+        </div>
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2">
           {SKILLS.map((skillGroup) => (
-            <div key={skillGroup.category} className="p-6 rounded-xl bg-slate-950/30 dark:bg-slate-900/20 border border-border/50">
-              <h3 className="font-bold text-lg mb-4 text-accent">{skillGroup.category}</h3>
+            <div key={skillGroup.category} className="p-6 rounded-lg bg-gradient-to-br from-slate-900/50 to-slate-800/30 border border-slate-700/50 hover:border-cyan-500/50 transition-all">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="inline-block w-2 h-2 rounded-full bg-cyan-400"></span>
+                <h3 className="font-mono font-bold text-lg text-cyan-400">{skillGroup.category}</h3>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {skillGroup.items.map((skill) => (
                   <span
                     key={skill}
-                    className="text-sm px-3 py-1 rounded-full bg-foreground/5 border border-border/50 hover:border-accent/50 transition-all"
+                    className="text-sm font-mono px-3 py-1 rounded bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:text-cyan-400 hover:border-cyan-500/50 hover:bg-cyan-500/10 transition-all"
                   >
                     {skill}
                   </span>
@@ -125,40 +150,50 @@ export default function ResumePage() {
       </section>
 
       {/* Certifications */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 border-t border-border/50">
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-[-.02em] mb-12">Certifications</h2>
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20 border-t border-slate-800">
+        <div className="mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tighter text-white">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Certifications</span>
+          </h2>
+        </div>
 
-        <div className="space-y-4">
+        <div className="grid gap-6 md:grid-cols-2">
           {CERTIFICATIONS.map((cert, index) => (
             <a
               key={index}
               href={cert.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="group p-6 rounded-xl border border-border/50 hover:border-accent/50 bg-slate-950/30 dark:bg-slate-900/20 transition-all hover:shadow-lg hover:shadow-accent/10 flex items-start justify-between"
+              className="group p-6 rounded-lg border border-slate-700/50 hover:border-blue-500 bg-gradient-to-br from-slate-900/50 to-slate-800/30 transition-all hover:shadow-lg hover:shadow-blue-500/30 hover:bg-slate-800/50"
             >
-              <div>
-                <h3 className="text-lg font-bold mb-1 group-hover:text-accent transition-colors">{cert.name}</h3>
-                <p className="text-foreground/60 mb-2">{cert.issuer}</p>
-                <span className="text-sm text-foreground/50">{cert.date}</span>
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold mb-2 text-white group-hover:text-blue-300 transition-colors">{cert.name}</h3>
+                  <p className="text-blue-400 font-semibold text-sm mb-2">{cert.issuer}</p>
+                  <span className="text-xs text-slate-500 font-mono">{cert.date}</span>
+                </div>
+                <ExternalLink size={20} className="text-slate-500 group-hover:text-blue-300 transition-colors flex-shrink-0 mt-1" />
               </div>
-              <ExternalLink size={20} className="text-foreground/40 group-hover:text-accent transition-colors flex-shrink-0" />
             </a>
           ))}
         </div>
       </section>
 
       {/* Education */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 border-t border-border/50">
-        <h2 className="text-3xl sm:text-4xl font-bold tracking-[-.02em] mb-12">Education</h2>
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20 border-t border-slate-800">
+        <div className="mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tighter text-white">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">Education</span>
+          </h2>
+        </div>
 
         <div className="space-y-6">
           {EDUCATION.map((edu, index) => (
-            <div key={index} className="p-6 rounded-xl bg-slate-950/30 dark:bg-slate-900/20 border border-border/50">
-              <h3 className="text-xl font-bold mb-2">{edu.degree}</h3>
-              <p className="text-lg text-accent font-semibold mb-2">{edu.school}</p>
-              <p className="text-foreground/70 mb-3">{edu.details}</p>
-              <div className="flex flex-wrap gap-6 text-sm text-foreground/60">
+            <div key={index} className="p-6 rounded-lg bg-gradient-to-br from-slate-900/50 to-slate-800/30 border border-slate-700/50 hover:border-pink-500/50 transition-all">
+              <h3 className="text-xl font-bold mb-2 text-white">{edu.degree}</h3>
+              <p className="text-lg text-pink-400 font-semibold mb-2">{edu.school}</p>
+              <p className="text-slate-400 mb-3">{edu.details}</p>
+              <div className="flex flex-wrap gap-6 text-sm text-slate-500 font-mono">
                 <span>Graduated: {edu.graduation}</span>
                 <span>•</span>
                 <span>GPA: {edu.gpa}</span>
@@ -169,23 +204,25 @@ export default function ResumePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 rounded-2xl bg-gradient-to-br from-accent/5 to-accent/10 border border-accent/20 my-16">
-        <div className="text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-[-.02em] mb-6">Interested in Working Together?</h2>
-          <p className="text-lg text-foreground/70 mb-8">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20 rounded-lg bg-gradient-to-br from-slate-900/50 via-slate-800/50 to-slate-900/50 border border-purple-500/30 my-16 sm:my-20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 pointer-events-none" />
+        <div className="text-center max-w-2xl mx-auto relative z-10">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tighter mb-4 sm:mb-6 text-white">
+            Let's Work <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Together</span>
+          </h2>
+          <p className="text-base sm:text-lg text-slate-400 mb-8">
             I'm always open to new opportunities and collaborations. Feel free to reach out!
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <a
               href="mailto:nkemande@gmail.com"
-              target='_top'
-              className="inline-flex items-center gap-2 px-8 py-3 bg-accent text-background rounded-full font-medium hover:bg-accent-light transition-all"
+              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-slate-950 font-semibold rounded-lg hover:shadow-lg hover:shadow-purple-500/50 transition-all"
             >
               <Mail size={20} /> Send an Email
             </a>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-8 py-3 border-2 border-accent text-accent rounded-full font-medium hover:bg-accent hover:text-background transition-all"
+              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 border border-purple-500/50 text-purple-400 font-semibold rounded-lg hover:bg-purple-500/10 hover:border-purple-400 transition-all"
             >
               Back to Portfolio <ArrowRight size={20} />
             </Link>

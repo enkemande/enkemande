@@ -1,0 +1,92 @@
+---
+title: Advanced TypeScript Patterns
+description: Master advanced TypeScript patterns including conditional types, mapped types, and generic constraints to write more flexible and type-safe code.
+date: 2025-10-15
+readTime: 12 min read
+author: Edison Nkemande
+category: TypeScript
+---
+
+## Introduction
+
+TypeScript offers powerful advanced features that enable developers to write more expressive and type-safe code. This guide explores patterns that will elevate your TypeScript skills.
+
+## Conditional Types
+
+Conditional types allow you to select one of two possible types based on a condition.
+
+```typescript
+type IsString<T> = T extends string ? true : false;
+
+type A = IsString<'hello'>; // true
+type B = IsString<42>; // false
+```
+
+### Practical Example: Flatten Array Type
+
+```typescript
+type Flatten<T> = T extends Array<infer U> ? U : T;
+
+type Str = Flatten<string[]>; // string
+type Num = Flatten<number>; // number
+```
+
+## Mapped Types
+
+Transform object keys and values systematically.
+
+```typescript
+type Readonly<T> = {
+  readonly [K in keyof T]: T[K];
+};
+
+type GettersSetters<T> = {
+  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
+} & {
+  [K in keyof T as `set${Capitalize<string & K>}`]: (v: T[K]) => void;
+};
+```
+
+## Generic Constraints
+
+Restrict generic types to specific shapes.
+
+```typescript
+interface HasId {
+  id: number;
+}
+
+function printId<T extends HasId>(obj: T): void {
+  console.log(obj.id);
+}
+
+printId({ id: 1, name: 'John' }); // ✓
+printId({ name: 'John' }); // ✗ Error
+```
+
+## Utility Types
+
+Leverage built-in utility types for common transformations.
+
+- `Partial<T>`: Make all properties optional
+- `Required<T>`: Make all properties required
+- `Readonly<T>`: Make all properties readonly
+- `Pick<T, K>`: Select specific properties
+- `Omit<T, K>`: Exclude specific properties
+- `Record<K, T>`: Create object with specific keys
+- `Exclude<T, U>`: Remove types from union
+- `Extract<T, U>`: Select types from union
+
+## Advanced Pattern: Builder Type
+
+```typescript
+type Builder<T> = {
+  [K in keyof T]-?: (val: T[K]) => Builder<T>;
+} & {
+  build(): T;
+};
+```
+
+## Conclusion
+
+Mastering these advanced patterns will significantly improve your TypeScript development experience and help you build more maintainable, type-safe applications.

@@ -1,0 +1,234 @@
+---
+title: Security Best Practices for Web Applications
+description: Protect your applications against common vulnerabilities including XSS, CSRF, SQL injection, and authentication attacks.
+date: 2025-10-05
+readTime: 13 min read
+author: Edison Nkemande
+category: Security
+---
+
+## Introduction
+
+Security is not optional. This comprehensive guide covers essential security practices for web applications.
+
+## Common Vulnerabilities (OWASP Top 10)
+
+### 1. Broken Authentication
+
+Implement strong authentication:
+
+```typescript
+// Use bcrypt for password hashing
+import bcrypt from 'bcrypt';
+
+// Hashing passwords
+const hashedPassword = await bcrypt.hash(password, 10);
+
+// Validating passwords
+const isValid = await bcrypt.compare(inputPassword, hashedPassword);
+
+// Never return sensitive data
+const user = await db.users.findById(id);
+delete user.password; // Remove before sending
+return user;
+```
+
+### 2. SQL Injection
+
+Use parameterized queries:
+
+```typescript
+// ✗ Bad: SQL injection vulnerability
+const query = `SELECT * FROM users WHERE email = '${email}'`;
+db.query(query);
+
+// ✓ Good: Parameterized queries
+const user = await db.users.findUnique({
+  where: { email }
+});
+
+// Or with raw SQL
+const query = 'SELECT * FROM users WHERE email = $1';
+db.query(query, [email]);
+```
+
+### 3. Cross-Site Scripting (XSS)
+
+Sanitize user input:
+
+```typescript
+// ✗ Bad: Vulnerable to XSS
+function Comment({ text }) {
+  return <div dangerouslySetInnerHTML={{ __html: text }} />;
+}
+
+// ✓ Good: Automatically escaped
+function Comment({ text }) {
+  return <div>{text}</div>;
+}
+
+// If HTML needed, use a sanitizer
+import DOMPurify from 'dompurify';
+
+function SafeHTML({ html }) {
+  const cleanHTML = DOMPurify.sanitize(html);
+  return <div dangerouslySetInnerHTML={{ __html: cleanHTML }} />;
+}
+```
+
+### 4. Cross-Site Request Forgery (CSRF)
+
+Implement CSRF tokens:
+
+```typescript
+// Middleware to check CSRF token
+app.post('/api/users', csrfProtection, (req, res) => {
+  // Token validated by middleware
+  res.json({ success: true });
+});
+
+// In form
+<form method="POST" action="/api/users">
+  <input type="hidden" name="_csrf" value={csrfToken} />
+  <button type="submit">Submit</button>
+</form>
+```
+
+### 5. Sensitive Data Exposure
+
+Protect sensitive data:
+
+```typescript
+// Use HTTPS only
+const helmet = require('helmet');
+app.use(helmet());
+
+// Don't log sensitive data
+logger.info('User created'); // ✓
+logger.info(`Password: ${password}`); // ✗
+
+// Encrypt sensitive data
+const crypto = require('crypto');
+const encrypted = crypto.encrypt(sensitiveData);
+
+// Use environment variables for secrets
+const apiKey = process.env.API_KEY;
+```
+
+## Authentication & Authorization
+
+### JWT Implementation
+
+```typescript
+import jwt from 'jsonwebtoken';
+
+// Generate token
+const token = jwt.sign(
+  { userId: user.id, email: user.email },
+  process.env.JWT_SECRET,
+  { expiresIn: '24h' }
+);
+
+// Verify token
+function verifyToken(token) {
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    return null;
+  }
+}
+
+// Middleware
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) return res.sendStatus(401);
+
+  const user = verifyToken(token);
+  if (!user) return res.sendStatus(403);
+
+  req.user = user;
+  next();
+}
+```
+
+## Security Headers
+
+```typescript
+app.use(helmet()); // Sets multiple security headers
+
+// Or manually:
+app.use((req, res, next) => {
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Content-Security-Policy', "default-src 'self'");
+  next();
+});
+```
+
+## Rate Limiting
+
+Prevent brute force attacks:
+
+```typescript
+import rateLimit from 'express-rate-limit';
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+
+app.post('/api/login', limiter, (req, res) => {
+  // Login logic
+});
+```
+
+## Input Validation
+
+```typescript
+import { z } from 'zod';
+
+const userSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+  age: z.number().int().positive()
+});
+
+function createUser(data) {
+  const validated = userSchema.parse(data);
+  // Use validated data
+}
+```
+
+## Dependency Management
+
+```bash
+# Check for vulnerabilities
+npm audit
+
+# Fix automatically
+npm audit fix
+
+# Use security scanning tools
+npm install --save-dev snyk
+npx snyk test
+```
+
+## Security Checklist
+
+- [ ] HTTPS enabled
+- [ ] Strong password hashing (bcrypt, argon2)
+- [ ] Rate limiting implemented
+- [ ] CSRF protection enabled
+- [ ] Input validation on all endpoints
+- [ ] Output encoding/escaping
+- [ ] Security headers set
+- [ ] Dependency vulnerabilities checked
+- [ ] Secrets not in version control
+- [ ] Logging doesn't expose sensitive data
+
+## Conclusion
+
+Security requires continuous attention. Follow these practices and regularly audit your applications to maintain strong security posture.

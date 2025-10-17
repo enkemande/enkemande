@@ -1,0 +1,113 @@
+---
+title: Database Design Fundamentals
+description: Master relational database design principles including normalization, schema design, and query optimization.
+date: 2025-10-10
+readTime: 12 min read
+author: Edison Nkemande
+category: Databases
+---
+
+## Introduction
+
+Solid database design is crucial for application performance and maintainability. This guide covers fundamental principles.
+
+## Normalization
+
+Normalization reduces data redundancy and improves data integrity through structured organization.
+
+### First Normal Form (1NF)
+- Eliminate repeating groups
+- All values are atomic
+- Each attribute contains only one value
+
+### Second Normal Form (2NF)
+- Must be in 1NF
+- Remove partial dependencies
+- All non-key attributes depend on the entire primary key
+
+### Third Normal Form (3NF)
+- Must be in 2NF
+- Remove transitive dependencies
+- Non-key attributes depend only on the primary key
+
+## Schema Design Example
+
+```sql
+-- Users Table
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  username VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Posts Table
+CREATE TABLE posts (
+  id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL REFERENCES users(id),
+  title VARCHAR(255) NOT NULL,
+  content TEXT,
+  published_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Comments Table
+CREATE TABLE comments (
+  id SERIAL PRIMARY KEY,
+  post_id INT NOT NULL REFERENCES posts(id),
+  user_id INT NOT NULL REFERENCES users(id),
+  content TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+## Indexing Strategy
+
+```sql
+-- Improve query performance
+CREATE INDEX idx_posts_user_id ON posts(user_id);
+CREATE INDEX idx_comments_post_id ON comments(post_id);
+CREATE INDEX idx_users_email ON users(email);
+```
+
+## Query Optimization
+
+### N+1 Problem
+```typescript
+// ✗ Bad: Multiple queries
+const users = await db.users.findMany();
+for (const user of users) {
+  user.posts = await db.posts.findMany({ where: { userId: user.id } });
+}
+
+// ✓ Good: Single query with relation
+const users = await db.users.findMany({
+  include: { posts: true }
+});
+```
+
+## Relationships
+
+### One-to-Many
+- One user has many posts
+- Foreign key on posts table
+
+### Many-to-Many
+```sql
+CREATE TABLE post_tags (
+  post_id INT REFERENCES posts(id),
+  tag_id INT REFERENCES tags(id),
+  PRIMARY KEY (post_id, tag_id)
+);
+```
+
+## Backup and Recovery
+
+- Regular backups (daily)
+- Test recovery procedures
+- Maintain transaction logs
+- Use replication for high availability
+
+## Conclusion
+
+Good database design provides a solid foundation for scalable, maintainable applications. Plan your schema carefully and normalize appropriately for your use case.

@@ -1,0 +1,122 @@
+---
+title: Testing Strategies for Modern Web Applications
+description: Comprehensive guide to testing strategies including unit testing, integration testing, and E2E testing for reliable applications.
+date: 2025-10-11
+readTime: 13 min read
+author: Edison Nkemande
+category: Testing
+---
+
+## Introduction
+
+Testing is fundamental to building reliable applications. This guide covers testing pyramid strategies and practical implementation.
+
+## Testing Pyramid
+
+### 1. Unit Tests (Base)
+- Fast and isolated
+- Test individual functions and components
+- High coverage is key
+
+```typescript
+// sum.test.ts
+import { sum } from './sum';
+
+describe('sum', () => {
+  it('should add two numbers', () => {
+    expect(sum(2, 3)).toBe(5);
+  });
+
+  it('should handle negative numbers', () => {
+    expect(sum(-5, 3)).toBe(-2);
+  });
+});
+```
+
+### 2. Integration Tests (Middle)
+- Test component interactions
+- Verify data flow between parts
+- Example: Form submission with API call
+
+```typescript
+import { render, screen, fireEvent } from '@testing-library/react';
+import { LoginForm } from './LoginForm';
+
+describe('LoginForm', () => {
+  it('should submit form with credentials', async () => {
+    render(<LoginForm onSubmit={mockSubmit} />);
+    
+    fireEvent.change(screen.getByLabelText('Email'), {
+      target: { value: 'test@example.com' }
+    });
+    
+    fireEvent.click(screen.getByText('Login'));
+    
+    await waitFor(() => {
+      expect(mockSubmit).toHaveBeenCalledWith({
+        email: 'test@example.com'
+      });
+    });
+  });
+});
+```
+
+### 3. E2E Tests (Top)
+- Test complete user workflows
+- Use tools like Playwright or Cypress
+- Critical paths only
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('user can login and view dashboard', async ({ page }) => {
+  await page.goto('http://localhost:3000/login');
+  await page.fill('input[type="email"]', 'user@example.com');
+  await page.fill('input[type="password"]', 'password123');
+  await page.click('button[type="submit"]');
+  
+  await expect(page).toHaveURL('http://localhost:3000/dashboard');
+  await expect(page.getByText('Welcome')).toBeVisible();
+});
+```
+
+## Testing Best Practices
+
+- **Write tests before code** (TDD)
+- **Test behavior, not implementation**
+- **Keep tests maintainable**
+- **Mock external dependencies**
+- **Use descriptive test names**
+- **Aim for 70-80% coverage**
+
+## Tools and Frameworks
+
+| Tool | Purpose |
+|------|---------|
+| Jest | Unit testing framework |
+| Vitest | Fast unit testing |
+| React Testing Library | Component testing |
+| Playwright | E2E testing |
+| Cypress | E2E testing (alternative) |
+| MSW | Mock API responses |
+
+## Continuous Integration
+
+```yaml
+# .github/workflows/test.yml
+name: Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - run: npm ci
+      - run: npm run test
+      - run: npm run test:e2e
+```
+
+## Conclusion
+
+A well-tested application gives confidence to deploy changes and maintain code quality over time.

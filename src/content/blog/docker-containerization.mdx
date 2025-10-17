@@ -1,0 +1,165 @@
+---
+title: Docker Containerization for Developers
+description: Learn Docker fundamentals for containerizing applications, managing dependencies, and ensuring consistency across environments.
+date: 2025-10-08
+readTime: 11 min read
+author: Edison Nkemande
+category: DevOps
+---
+
+## Introduction
+
+Docker enables consistent application deployment across different environments. This guide covers Docker essentials for developers.
+
+## What is Docker?
+
+Docker packages your application and dependencies into a standardized unit called a container, ensuring it runs the same everywhere.
+
+## Dockerfile Structure
+
+```dockerfile
+# Use official Node.js image as base
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy application code
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Start application
+CMD ["npm", "start"]
+```
+
+## Docker Compose
+
+Manage multi-container applications:
+
+```yaml
+# docker-compose.yml
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://db:5432/myapp
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=myapp
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+```
+
+## Common Docker Commands
+
+```bash
+# Build image
+docker build -t my-app:1.0 .
+
+# Run container
+docker run -p 3000:3000 my-app:1.0
+
+# View running containers
+docker ps
+
+# View all containers
+docker ps -a
+
+# Stop container
+docker stop container_id
+
+# Remove image
+docker rmi image_id
+
+# View logs
+docker logs container_id
+
+# Execute command in container
+docker exec -it container_id bash
+```
+
+## Best Practices
+
+### Minimize Image Size
+- Use Alpine Linux base images
+- Remove build dependencies
+- Use multi-stage builds
+
+```dockerfile
+# Multi-stage build
+FROM node:18 AS builder
+WORKDIR /app
+COPY . .
+RUN npm ci && npm run build
+
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY package*.json ./
+RUN npm ci --only=production
+CMD ["npm", "start"]
+```
+
+### Security
+- Use specific image versions (not `latest`)
+- Don't run as root
+- Scan for vulnerabilities
+- Use secrets for sensitive data
+
+```dockerfile
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodejs -u 1001
+USER nodejs
+```
+
+### Performance
+- Leverage layer caching
+- Order commands by change frequency
+- Use `.dockerignore` file
+
+## Container Networking
+
+```bash
+# Create network
+docker network create my-network
+
+# Run container on network
+docker run --network my-network --name web my-app
+
+# Another container can access it at 'http://web:3000'
+docker run --network my-network another-app
+```
+
+## Volumes for Data Persistence
+
+```bash
+# Named volume
+docker run -v my-data:/app/data my-app
+
+# Bind mount
+docker run -v /path/on/host:/app/data my-app
+```
+
+## Conclusion
+
+Docker standardizes deployment and simplifies development workflows. Master containerization to streamline your development process.

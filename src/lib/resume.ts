@@ -75,18 +75,18 @@ export const CERTIFICATIONS: Certification[] = [
     name: 'AWS Certified Solutions Architect',
     issuer: 'Amazon Web Services',
     date: 'Mar 2023',
-    link: '#',
+    link: 'https://aws.amazon.com/certification/certified-solutions-architect-associate/',
   },
   {
     name: 'Professional Scrum Master I',
     issuer: 'Scrum.org',
     date: 'Aug 2022',
-    link: '#',
+    link: 'https://www.scrum.org/professional-scrum-master-i-psm-i',
   },
   {
     name: 'React Advanced Patterns',
     issuer: 'Frontend Masters',
     date: 'Jan 2021',
-    link: '#',
+    link: 'https://frontendmasters.com/courses/advanced-react-patterns/',
   },
 ];

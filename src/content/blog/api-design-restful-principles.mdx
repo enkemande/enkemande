@@ -1,0 +1,155 @@
+---
+title: API Design and RESTful Principles
+description: Build scalable and maintainable APIs following REST principles, best practices for versioning, authentication, and error handling.
+date: 2025-10-09
+readTime: 11 min read
+author: Edison Nkemande
+category: API Design
+---
+
+## Introduction
+
+Well-designed APIs are critical for modern applications. This guide covers RESTful principles and best practices.
+
+## REST Principles
+
+### Resources
+Think in terms of nouns, not verbs:
+
+```
+/users           - collection of users
+/users/123       - specific user
+/users/123/posts - user's posts
+```
+
+### HTTP Methods
+- `GET` - Retrieve resource
+- `POST` - Create resource
+- `PUT` - Replace entire resource
+- `PATCH` - Partial update
+- `DELETE` - Remove resource
+
+### Status Codes
+
+| Code | Meaning |
+|------|---------|
+| 200 | OK |
+| 201 | Created |
+| 204 | No Content |
+| 400 | Bad Request |
+| 401 | Unauthorized |
+| 403 | Forbidden |
+| 404 | Not Found |
+| 500 | Server Error |
+
+## API Endpoint Examples
+
+```typescript
+// GET /api/users - List all users
+GET /api/users?page=1&limit=10&sort=created_at
+
+// POST /api/users - Create user
+POST /api/users
+Content-Type: application/json
+{ "email": "user@example.com", "name": "John Doe" }
+
+// GET /api/users/123 - Get specific user
+GET /api/users/123
+
+// PATCH /api/users/123 - Update user
+PATCH /api/users/123
+{ "name": "Jane Doe" }
+
+// DELETE /api/users/123 - Delete user
+DELETE /api/users/123
+```
+
+## Versioning Strategy
+
+```
+/api/v1/users      - version 1
+/api/v2/users      - version 2 (breaking changes)
+```
+
+Or use header-based versioning:
+```
+Accept: application/vnd.api+json;version=2
+```
+
+## Authentication
+
+### Bearer Tokens
+```typescript
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+```
+
+### API Keys
+```
+X-API-Key: your_api_key_here
+```
+
+## Error Handling
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Email is required",
+    "details": [
+      {
+        "field": "email",
+        "message": "Email must be a valid email address"
+      }
+    ]
+  }
+}
+```
+
+## Rate Limiting
+
+```typescript
+// Response headers
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 999
+X-RateLimit-Reset: 1634000000
+```
+
+## Pagination
+
+```typescript
+GET /api/users?page=2&limit=20
+
+{
+  "data": [...],
+  "pagination": {
+    "page": 2,
+    "limit": 20,
+    "total": 150,
+    "pages": 8
+  }
+}
+```
+
+## Documentation
+
+Use tools like Swagger/OpenAPI:
+
+```yaml
+openapi: 3.0.0
+paths:
+  /users:
+    get:
+      summary: List all users
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+```
+
+## Conclusion
+
+Following RESTful principles and best practices ensures your APIs are predictable, maintainable, and easy to consume.

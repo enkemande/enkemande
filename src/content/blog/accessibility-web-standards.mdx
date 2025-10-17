@@ -1,0 +1,189 @@
+---
+title: Web Accessibility and WCAG Standards
+description: Build inclusive web applications following WCAG guidelines, implementing semantic HTML, ARIA, and keyboard navigation.
+date: 2025-10-06
+readTime: 12 min read
+author: Edison Nkemande
+category: Accessibility
+---
+
+## Introduction
+
+Web accessibility ensures your application is usable by everyone, including people with disabilities. This guide covers WCAG standards and practical implementation.
+
+## Why Accessibility Matters
+
+- **Legal**: WCAG compliance required in many jurisdictions
+- **Business**: 1 in 4 adults have disabilities
+- **SEO**: Proper semantics improve search rankings
+- **UX**: Better accessibility benefits everyone
+
+## WCAG Principles (POUR)
+
+### Perceivable
+Users must be able to perceive content:
+- Provide alternative text for images
+- Use sufficient color contrast
+- Support text resizing
+- Caption audio and video
+
+### Operable
+Users must be able to navigate content:
+- Full keyboard accessibility
+- Sufficient time to read/interact
+- Avoid seizure-inducing content
+- Provide multiple navigation methods
+
+### Understandable
+Users must understand the content:
+- Clear language
+- Predictable navigation
+- Input assistance
+- Consistent design
+
+### Robust
+Content must work across technologies:
+- Valid HTML
+- ARIA attributes properly used
+- Works with assistive technology
+
+## Semantic HTML
+
+```html
+<!-- ✗ Bad: Non-semantic -->
+<div onclick="navigate()">Click me</div>
+<div role="button">Submit</div>
+
+<!-- ✓ Good: Semantic -->
+<button onclick="navigate()">Click me</button>
+<button type="submit">Submit</button>
+
+<!-- Structure -->
+<header>Navigation</header>
+<main>
+  <article>Content</article>
+  <aside>Sidebar</aside>
+</main>
+<footer>Copyright</footer>
+```
+
+## Alternative Text for Images
+
+```html
+<!-- ✗ Bad -->
+<img src="user.jpg" />
+
+<!-- ✓ Good: Descriptive -->
+<img src="user.jpg" alt="Profile picture of John Doe" />
+
+<!-- ✗ Bad: Redundant -->
+<img src="document.png" alt="image" />
+
+<!-- ✓ Good: Meaningful -->
+<img src="document.png" alt="Tax return document for 2024" />
+```
+
+## Color Contrast
+
+- Normal text: 4.5:1 contrast ratio
+- Large text: 3:1 contrast ratio
+- UI components: 3:1 contrast ratio
+
+```css
+/* Use sufficient contrast */
+body {
+  color: #333333;      /* Avoid light gray text */
+  background: #ffffff;
+}
+
+button {
+  background: #0066CC;  /* Blue on white: 8.5:1 ✓ */
+  color: white;
+}
+```
+
+## ARIA Attributes
+
+Use ARIA when HTML alone isn't sufficient:
+
+```html
+<!-- Labels -->
+<input aria-label="Email address" type="email" />
+
+<!-- Descriptions -->
+<button aria-describedby="btn-desc">Submit</button>
+<span id="btn-desc">Submit your form securely</span>
+
+<!-- Live regions (for dynamic content) -->
+<div aria-live="polite" aria-atomic="true">
+  Item added to cart
+</div>
+
+<!-- Expand/collapse -->
+<button aria-expanded="false" aria-controls="menu">
+  Menu
+</button>
+<nav id="menu" hidden>
+  Navigation items
+</nav>
+```
+
+## Keyboard Navigation
+
+```tsx
+// Make interactive elements keyboard accessible
+export function Modal({ onClose }) {
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
+
+  return (
+    <div role="dialog" aria-modal="true">
+      <button onClick={onClose}>Close (Esc)</button>
+    </div>
+  );
+}
+```
+
+## Form Accessibility
+
+```html
+<form>
+  <label for="email">Email Address:</label>
+  <input id="email" type="email" required aria-required="true" />
+  
+  <label for="message">Message:</label>
+  <textarea id="message" aria-describedby="char-hint"></textarea>
+  <p id="char-hint">Maximum 500 characters</p>
+  
+  <button type="submit">Send</button>
+</form>
+```
+
+## Testing Tools
+
+- **axe DevTools**: Chrome extension for accessibility audit
+- **WAVE**: Web accessibility evaluation
+- **Lighthouse**: Built into Chrome DevTools
+- **Screen readers**: NVDA (Windows), JAWS, VoiceOver (Mac)
+
+## Accessibility Checklist
+
+- [ ] Semantic HTML used throughout
+- [ ] Images have descriptive alt text
+- [ ] Color contrast meets WCAG AA
+- [ ] Keyboard navigation works
+- [ ] Focus indicators visible
+- [ ] Form labels associated with inputs
+- [ ] Error messages clear
+- [ ] No time-dependent interactions
+- [ ] Videos captioned
+- [ ] Links have meaningful text
+
+## Conclusion
+
+Building accessible applications from the start is easier than retrofitting. Prioritize inclusivity and create better experiences for all users.

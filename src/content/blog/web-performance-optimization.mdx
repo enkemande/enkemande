@@ -1,0 +1,75 @@
+---
+title: Web Performance Optimization Guide
+description: Comprehensive strategies for optimizing web performance, from code splitting to image optimization and Core Web Vitals improvement.
+date: 2025-10-14
+readTime: 15 min read
+author: Edison Nkemande
+category: Performance
+---
+
+## Introduction
+
+Web performance is critical for user experience and SEO. This guide covers actionable strategies to optimize your web applications.
+
+## Core Web Vitals
+
+Google's Core Web Vitals measure user experience across three key areas:
+
+### 1. Largest Contentful Paint (LCP)
+- Measures visual completeness
+- Target: < 2.5 seconds
+- Optimize: Images, fonts, lazy loading
+
+### 2. First Input Delay (FID)
+- Measures interactivity
+- Target: < 100 milliseconds
+- Optimize: JavaScript execution, long tasks
+
+### 3. Cumulative Layout Shift (CLS)
+- Measures visual stability
+- Target: < 0.1
+- Optimize: Reserve space, avoid unsized media
+
+## Performance Optimization Techniques
+
+### Code Splitting
+
+```typescript
+// Dynamic imports for route-based splitting
+const Dashboard = dynamic(() => import('./Dashboard'), {
+  loading: () => <LoadingSpinner />,
+});
+```
+
+### Image Optimization
+
+- Use next/image component
+- Serve appropriate sizes
+- Use modern formats (WebP)
+- Implement lazy loading
+
+### JavaScript Bundling
+
+- Minimize main bundle
+- Remove unused code
+- Tree-shake dependencies
+- Compress assets
+
+## Monitoring Performance
+
+Implement performance monitoring tools:
+- Web Vitals API
+- Google Analytics
+- Lighthouse CI
+- Custom metrics
+
+## Caching Strategies
+
+- Browser caching
+- CDN caching
+- Service worker caching
+- API response caching
+
+## Conclusion
+
+Prioritizing performance optimization creates better user experiences and improves SEO rankings. Monitor continuously and iterate based on real user data.

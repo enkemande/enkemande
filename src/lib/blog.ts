@@ -126,3 +126,28 @@ export async function getRecentBlogPosts(limit: number = 3): Promise<BlogPost[]>
   const posts = await getAllBlogPosts();
   return posts.slice(0, limit);
 }
+
+/**
+ * Get paginated blog posts
+ */
+export async function getPaginatedBlogPosts(
+  page: number = 1,
+  postsPerPage: number = 6,
+  category?: string
+): Promise<{ posts: BlogPost[]; totalPages: number; currentPage: number; totalPosts: number }> {
+  const posts = category ? await getBlogPostsByCategory(category) : await getAllBlogPosts();
+  const totalPosts = posts.length;
+  const totalPages = Math.ceil(totalPosts / postsPerPage);
+  
+  // Ensure page is within valid range
+  const validPage = Math.max(1, Math.min(page, totalPages || 1));
+  const startIndex = (validPage - 1) * postsPerPage;
+  const endIndex = startIndex + postsPerPage;
+  
+  return {
+    posts: posts.slice(startIndex, endIndex),
+    totalPages,
+    currentPage: validPage,
+    totalPosts,
+  };
+}

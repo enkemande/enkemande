@@ -1,0 +1,120 @@
+---
+title: Next.js Best Practices for Production
+description: Learn production-ready Next.js patterns including App Router, API routes, middleware, and deployment strategies.
+date: 2025-10-12
+readTime: 14 min read
+author: Edison Nkemande
+category: Next.js
+---
+
+## Introduction
+
+Next.js has evolved significantly with the App Router. This guide covers best practices for building production-ready applications.
+
+## App Router Structure
+
+Organize your Next.js app with clear directory structure:
+
+```
+app/
+  (auth)/
+    login/
+    register/
+  (dashboard)/
+    page.tsx
+    layout.tsx
+    settings/
+      page.tsx
+  api/
+    users/
+      route.ts
+```
+
+## Server Components vs Client Components
+
+### Server Components (Default)
+- Direct database access
+- Keep sensitive data secure
+- Reduced client-side JavaScript
+- Perfect for fetching and rendering
+
+```typescript
+// app/posts/page.tsx
+export default async function PostsPage() {
+  const posts = await fetchPosts();
+  return <div>{posts.map(p => <Post key={p.id} {...p} />)}</div>;
+}
+```
+
+### Client Components
+- Interactive features
+- Event listeners, state, effects
+- Use 'use client' directive
+
+```typescript
+'use client';
+
+import { useState } from 'react';
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+  return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+```
+
+## API Routes and Route Handlers
+
+```typescript
+// app/api/posts/route.ts
+export async function GET(request: Request) {
+  const posts = await db.posts.findMany();
+  return Response.json(posts);
+}
+
+export async function POST(request: Request) {
+  const body = await request.json();
+  const post = await db.posts.create({ data: body });
+  return Response.json(post, { status: 201 });
+}
+```
+
+## Middleware for Authentication
+
+```typescript
+// middleware.ts
+import { NextRequest, NextResponse } from 'next/server';
+
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get('auth_token');
+  
+  if (!token && request.nextUrl.pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+}
+
+export const config = {
+  matcher: ['/dashboard/:path*', '/api/protected/:path*'],
+};
+```
+
+## Environment Variables
+
+Use `.env.local` for sensitive data:
+
+```bash
+DATABASE_URL=postgres://...
+API_SECRET=your_secret_key
+NEXT_PUBLIC_API_URL=https://api.example.com
+```
+
+## Deployment Optimization
+
+- Use Vercel for seamless deployment
+- Enable automatic image optimization
+- Configure Edge Functions for low latency
+- Set up proper error tracking (Sentry)
+- Use database connection pooling
+
+## Conclusion
+
+Following these practices ensures your Next.js applications are scalable, secure, and performant in production.

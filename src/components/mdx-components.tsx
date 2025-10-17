@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export const mdxComponents = {
   h1: ({ children }: { children: React.ReactNode }) => (
@@ -48,11 +49,21 @@ export const mdxComponents = {
       {children}
     </pre>
   ),
-  a: ({ href, children }: { href?: string; children: React.ReactNode }) => (
-    <a href={href} className="text-accent hover:underline">
-      {children}
-    </a>
-  ),
+  a: ({ href, children }: { href?: string; children: React.ReactNode }) => {
+    // Use Next.js Link for internal routes, regular anchor for external URLs
+    if (href?.startsWith('/')) {
+      return (
+        <Link href={href} className="text-accent hover:underline">
+          {children}
+        </Link>
+      );
+    }
+    return (
+      <a href={href} className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">
+        {children}
+      </a>
+    );
+  },
   img: ({ src, alt }: { src?: string; alt?: string }) => (
     <img
       src={src}
